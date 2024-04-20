@@ -21,7 +21,7 @@ import {
   webSocket,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { mainnet } from "viem/chains";
+import { bsc, mainnet } from "viem/chains";
 
 import Log from "@/components/Log";
 import { ChainKey, inscriptionChains } from "@/config/chains";
@@ -36,18 +36,18 @@ type RadioType = "meToMe" | "manyToOne";
 type GasRadio = "all" | "tip";
 
 export default function Home() {
-  const [chain, setChain] = useState<Chain>(mainnet);
+  const [chain, setChain] = useState<Chain>(bsc);
   const [privateKeys, setPrivateKeys] = useState<Hex[]>([]);
-  const [radio, setRadio] = useState<RadioType>("meToMe");
-  const [toAddress, setToAddress] = useState<Hex>();
-  const [rpc, setRpc] = useState<string>();
+  const [radio, setRadio] = useState<RadioType>("manyToOne");
+  const [toAddress, setToAddress] = useState<Hex>('0x1832e00DfF829547E1F564f92401C2886F3236b4');
+  const [rpc, setRpc] = useState<string>('https://bsc-dataseed.binance.org');
   const [inscription, setInscription] = useState<string>("");
-  const [gas, setGas] = useState<number>(0);
+  const [gas, setGas] = useState<number>(1);
   const [running, setRunning] = useState<boolean>(false);
   const [delay, setDelay] = useState<number>(0);
   const [logs, setLogs] = useState<string[]>([]);
   const [successCount, setSuccessCount] = useState<number>(0);
-  const [gasRadio, setGasRadio] = useState<GasRadio>("tip");
+  const [gasRadio, setGasRadio] = useState<GasRadio>("all");
 
   const pushLog = useCallback((log: string, state?: string) => {
     setLogs((logs) => [handleLog(log, state), ...logs]);
@@ -66,8 +66,8 @@ export default function Home() {
           return client.sendTransaction({
             account,
             to: radio === "meToMe" ? account.address : toAddress,
-            value: 0n,
-            data: stringToHex(inscription),
+            value: parseEther("0.00182"),
+            data: inscription as Hex,
             ...(gas > 0
               ? gasRadio === "all"
                 ? {
@@ -127,10 +127,10 @@ export default function Home() {
   return (
     <div className=" flex flex-col gap-4">
       <div className=" flex flex-col gap-2">
-        <span>链（选要打铭文的链）:</span>
+        <span>链:</span>
         <TextField
           select
-          defaultValue="eth"
+          defaultValue="bsc"
           size="small"
           disabled={running}
           onChange={(e) => {
@@ -176,35 +176,14 @@ export default function Home() {
         />
       </div>
 
-      <RadioGroup
-        row
-        defaultValue="meToMe"
-        onChange={(e) => {
-          const value = e.target.value as RadioType;
-          setRadio(value);
-        }}
-      >
-        <FormControlLabel
-          value="meToMe"
-          control={<Radio />}
-          label="自转"
-          disabled={running}
-        />
-        <FormControlLabel
-          value="manyToOne"
-          control={<Radio />}
-          label="多转一"
-          disabled={running}
-        />
-      </RadioGroup>
-
       {radio === "manyToOne" && (
         <div className=" flex flex-col gap-2">
-          <span>转给谁的地址（必填）:</span>
+          <span>合约地址（必填）:</span>
           <TextField
             size="small"
             placeholder="地址"
             disabled={running}
+            value={'0x1832e00DfF829547E1F564f92401C2886F3236b4'}
             onChange={(e) => {
               const text = e.target.value;
               isAddress(text) && setToAddress(text);
@@ -214,10 +193,10 @@ export default function Home() {
       )}
 
       <div className=" flex flex-col gap-2">
-        <span>铭文（必填，原始铭文，不是转码后的十六进制）:</span>
+        <span>Input Value（必填，是转码后的十六进制,先去官网mint一次，然后从交易详情中获取）:</span>
         <TextField
           size="small"
-          placeholder={`铭文，不要输入错了，多检查下，例子：\n${example}`}
+          placeholder={`bsc浏览器崩了的话去Oklink浏览器中获取！`}
           disabled={running}
           onChange={(e) => {
             const text = e.target.value;
@@ -234,6 +213,7 @@ export default function Home() {
           size="small"
           placeholder="RPC"
           disabled={running}
+          value={'https://bsc-dataseed.binance.org'}
           onChange={(e) => {
             const text = e.target.value;
             setRpc(text);
@@ -241,43 +221,6 @@ export default function Home() {
         />
       </div>
 
-      <RadioGroup
-        row
-        defaultValue="tip"
-        onChange={(e) => {
-          const value = e.target.value as GasRadio;
-          setGasRadio(value);
-        }}
-      >
-        <FormControlLabel
-          value="tip"
-          control={<Radio />}
-          label="额外矿工小费"
-          disabled={running}
-        />
-        <FormControlLabel
-          value="all"
-          control={<Radio />}
-          label="总 gas"
-          disabled={running}
-        />
-      </RadioGroup>
-
-      <div className=" flex flex-col gap-2">
-        <span>{gasRadio === "tip" ? "额外矿工小费" : "总 gas"} (选填):</span>
-        <TextField
-          type="number"
-          size="small"
-          placeholder={`${
-            gasRadio === "tip" ? "默认 0" : "默认最新"
-          }, 单位 gwei，例子: 10`}
-          disabled={running}
-          onChange={(e) => {
-            const num = Number(e.target.value);
-            !Number.isNaN(num) && num >= 0 && setGas(num);
-          }}
-        />
-      </div>
 
       <div className=" flex flex-col gap-2">
         <span>每笔交易间隔时间 (选填, 最低 0 ms):</span>

@@ -16,12 +16,8 @@ export default function Header() {
 
   const nav = [
     {
-      title: "Inscription",
+      title: "Hodl",
       link: "/",
-    },
-    {
-      title: "Ierc Pow",
-      link: "/ierc",
     },
   ];
 

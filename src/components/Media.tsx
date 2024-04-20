@@ -6,17 +6,12 @@ export default function Media() {
     {
       title: "代码",
       linkText: "Github",
-      link: "https://github.com/vectorisvector/inscription",
+      link: "https://github.com/0xStarry/Polaris-fork",
     },
     {
       title: "开发者",
-      linkText: "@cybervector_",
-      link: "https://twitter.com/cybervector_",
-    },
-    {
-      title: "Alpha",
-      linkText: "@ChaunceyCrypto",
-      link: "https://twitter.com/ChaunceyCrypto",
+      linkText: "@fftb.sats",
+      link: "https://twitter.com/0x_starry",
     },
   ];
 
@@ -46,7 +41,11 @@ export default function Media() {
       </div>
 
       <div className=" text-center">
-        打赏地址☕️: 0xcb64546921145fe3fa1316d08e4af5b6b60d3945
+        打赏地址☕️: 0x7f37494c82892e1c5f1bf65fdc3c54964bc9befe
+      </div>
+      
+      <div className=" text-center">
+        代码参考自：https://github.com/vectorisvector/Polaris
       </div>
     </div>
   );

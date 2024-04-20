@@ -12,8 +12,8 @@ import { ReactNode } from "react";
 import ThemeRegister from "@/components/ThemeRegister";
 
 export const metadata: Metadata = {
-  title: "Polaris - Automatic Alpha Script",
-  description: "Automatic Alpha Script",
+  title: "Hodl - Automatic Mint Script",
+  description: "Hodl - Automatic Mint Script",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
