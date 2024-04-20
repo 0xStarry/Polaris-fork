@@ -6,7 +6,7 @@ export default function Media() {
     {
       title: "代码",
       linkText: "Github",
-      link: "https://github.com/0xStarry/Polaris-fork/tree/hodl",
+      link: "https://github.com/0xStarry/Polaris-fork",
     },
     {
       title: "推特",
