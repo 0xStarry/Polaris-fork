@@ -9,7 +9,7 @@ export default function Media() {
       link: "https://github.com/0xStarry/Polaris-fork/tree/hodl",
     },
     {
-      title: "开发者",
+      title: "推特",
       linkText: "@fftb.sats",
       link: "https://twitter.com/0x_starry",
     },
